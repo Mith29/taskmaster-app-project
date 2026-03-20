@@ -5,11 +5,11 @@ const projectSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: ture,
+    unique: true
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   user: {
     type: Schema.Types.ObjectId,

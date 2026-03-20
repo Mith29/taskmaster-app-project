@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 
     res.status(201).json(newProject);
   } catch (error) {
-    res.status(400).json({ message: errorMessage });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
     const projects = await Project.find({ user: req.user._id }).populate('user');
     res.status(200).json(projects);
   } catch (error) {
-        res.status(500).json({ message: errorMessage });
+        res.status(500).json({ message: error.message });
 
   }
 });
@@ -40,14 +40,14 @@ router.get("/:id", async (req, res) => {
     res.status(200).json({project});
 
   } catch (error) {
-    res.status(400).json({ message: errorMessage });
+    res.status(400).json({ message: error.message });
   }
 });
 
 //PUT /api/projects/:id: Update a project. 
 router.put("/:id", async (req, res) => {
   try {
-        const project = await Project.findOne(req.params.id);
+        const project = await Project.findOne({_id:req.params.id});
 if(!project){
  return res.status(404).json({ message:` No project found with this id ${req.params.id}!` })
 }
@@ -66,7 +66,7 @@ res.status(201).json(updatedProject);
 // DELETE /api/projects/:id: Delete a project.
 router.delete("/:id", async (req, res) => {
 try {
-        const project = await Project.findOne(req.params.id);
+        const project = await Project.findOne({_id: req.params.id});
 if(!project){
  return res.status(404).json({ message:` No project found with this id ${req.params.id}!` })
 }
@@ -74,8 +74,8 @@ if(project.user.toString() !== req.user._id){
     return res.status(403).json({ message: `user is not authorized to delete this project` });
 }
 
-const deletedProject = await Project.findByIdDelete(req.params.id);
-res.status(201).json(deletedProjectt);
+const deletedProject = await Project.findByIdAndDelete(req.params.id);
+res.status(200).json(deletedProject);
   } catch (error) {
     res.status(500).json(error);
 

@@ -1,21 +1,21 @@
 import express from 'express';
-import User from '../../../mod-14/lab-2/notes-app/models/User.js';
-
+import User from '../models/User.js';
+import {signToken} from '../utils/auth.js'
 
 const router = express.Router();
 
 //POST /api/users/register
 router.post('/register', async (req,res)=>{
     try{
-     const existingUser = await User.findOne(req.body.email);
-     if(existingUser){
-        res.status(400).json({message:`User with the same ${existingUser} already exists!`});
-     }
+    //  const existingUser = await User.find({email:req.body.email});
+    //  if(existingUser){
+    //     return res.status(400).json({message:`User with the same ${req.body.email} already exists!`});
+    //  }
   const newUser = await User.create(req.body);
   console.log(newUser);
   res.status(201).json(newUser);
-    }catch(e){
-  res.status(400).json({message: e})
+    }catch(error){
+  res.status(400).json({message: error.message})
     }
     }
 )
@@ -35,9 +35,9 @@ router.post('/login', async (req,res)=> {
     }
   const token = signToken(user);
   res.status(200).json({token,user});
-    }catch(e){
+    }catch(error){
 
-  res.status(400).json({message: e})
+  res.status(400).json({message: error.message})
 
     }
 });
