@@ -7,7 +7,7 @@ const router = express.Router();
 //POST /api/users/register
 router.post('/register', async (req,res)=>{
     try{
-     const existingUser = req.body.email;
+     const existingUser = await User.findOne(req.body.email);
      if(existingUser){
         res.status(400).json({message:`User with the same ${existingUser} already exists!`});
      }
@@ -33,9 +33,14 @@ router.post('/login', async (req,res)=> {
     if(!correctPassword){
         res.status(400).json({message: "wrong password!"})
     }
-
+  const token = signToken(user);
+  res.status(200).json({token,user});
     }catch(e){
 
+  res.status(400).json({message: e})
 
     }
-})
+});
+
+
+export default router;
