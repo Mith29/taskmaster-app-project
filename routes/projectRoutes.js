@@ -75,7 +75,8 @@ if(project.user.toString() !== req.user._id){
 }
 
 const deletedProject = await Project.findByIdAndDelete(req.params.id);
-res.status(200).json(deletedProject);
+const deletedTasks = await Task.deleteMany({ project: req.params.id});
+res.status(200).json(deletedProject, deletedTasks);
   } catch (error) {
     res.status(500).json(error);
 

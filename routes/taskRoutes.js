@@ -30,9 +30,9 @@ res.status(201).json(newTask);
 router.get('/:projectId/tasks', async(req,res)=>{
 
 try{
-console.log("Project ID:", req.params.projectId);
-console.log("User ID:", req.user._id);    
-const tasks = await Task.find({project: req.params.projectId});
+// console.log("Project ID:", req.params.projectId);
+// console.log("User ID:", req.user._id);    
+const tasks = await Task.find({project: req.params.projectId}).populate('project');
 res.status(200).json(tasks);
 }catch(error){
 
